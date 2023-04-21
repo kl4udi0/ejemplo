@@ -1,4 +1,3 @@
-<?php
 // Add free gifted product for specific products in the cart Rutina Rejuvenecedora Priori
 add_action( 'woocommerce_before_calculate_totals', 'check_free_gifted_product_promo_rejuvenecedora' );
 function check_free_gifted_product_promo_rejuvenecedora( $cart ) {
@@ -24,8 +23,6 @@ function check_free_gifted_product_promo_rejuvenecedora( $cart ) {
 	
     $cart_subtotal     = 0; // Initializing
 
-    // Loop through cart items (first loop)
-    //foreach ( $cart->get_cart() as $cart_item_key => $cart_item ){
     foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
         // Getting an instance of the product object
         $product =  $cart_item['data'];
@@ -48,9 +45,7 @@ function check_free_gifted_product_promo_rejuvenecedora( $cart ) {
     }
 
     // If the free product is not already in cart, subtotal match and the customer insn't added an excluded product, addd it
-    //if ( ! isset($free_key) && $product->is_on_sale() == false && $is_target_product_id == true ) {
     if ( ! isset($free_key) && $product->is_on_sale() == false && ( $cart_item['product_id'] == 5853 || in_array($cart_item['product_id'], $target_product_id_individuales) ) && current_time('timestamp') > $start_time && current_time('timestamp') < $expiration_time ) {
-        //$cart->add_to_cart( $free_product_id );//Añade 1 solo producto al carrito
 		//Añade más de 1 producto a la vez al carrito
 		foreach ($free_product_id as $product_id) {
 			$cart->add_to_cart($product_id);
@@ -61,17 +56,6 @@ function check_free_gifted_product_promo_rejuvenecedora( $cart ) {
     elseif ( isset($free_key) && $product->is_on_sale() == true ) {
         $cart->remove_cart_item( $free_key );
     }
-	
-    // If the free product is already in cart and the customer was added an excluded product, remove it
-    //elseif ( isset($free_key) && $is_target_product_id == false && ( ! isset($free_key) && $free_product_id == 2817 ) ) {
-    //  $cart->remove_cart_item( $free_key );
-    //}
-
-    // If the free product is already in cart and the customer was added an excluded product, remove it
-	//$cart_items = $cart->get_cart_contents();
-	//if (count($cart_items) == 2 && isset($cart_items[2817]) && isset($cart_items[5870])) {
-	//	$cart->remove_cart_item(5870);
-	//}
 	
 	$cart_items = $cart->get_cart_contents();
 	$product_ids = array();
@@ -101,11 +85,6 @@ function check_free_gifted_product_promo_rejuvenecedora( $cart ) {
         $cart->remove_cart_item( $free_key );
     }
 
-    // Keep free product quantity to 1.
-	//Para 1 producto
-    //elseif ( isset($free_qty) && $free_qty > 1 ) {
-    //    $cart->set_quantity( $free_key, 1 );
-    //}
 	//Para más de 1
 	foreach ($free_product_id as $product_id) {
 		if (isset($cart_item['product_id']) && $cart_item['product_id'] == $product_id) {
